@@ -19,12 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'report-1'], function () {
-    Route::get('', [HierarchyReportController::class, 'index']);
-    Route::post('', [HierarchyReportController::class, 'report']);
-});
+Route::group(['prefix' => 'reports'], function () {
+    Route::group(['prefix' => 'hierarchy'], function () {
+        Route::get('', [HierarchyReportController::class, 'index']);
+    });
 
-Route::group(['prefix' => 'report-2'], function () {
-    Route::get('', [TransactionsReportController::class, 'index']);
-    Route::post('', [TransactionsReportController::class, 'report']);
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::get('', [TransactionsReportController::class, 'index']);
+    });
 });

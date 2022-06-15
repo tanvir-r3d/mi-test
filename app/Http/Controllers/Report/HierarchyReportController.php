@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Report;
 
-use App\Models\AccountHead;
 use App\Http\Controllers\Controller;
+use App\Models\AccountHead;
 use App\Services\Reports\HierarchyFormatter;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class HierarchyReportController extends Controller
 {
-    public function index()
+    /**
+     * @return Factory|View|Application
+     */
+    public function index(): Factory|View|Application
     {
         $accountHeads = AccountHead::query()
             ->with([

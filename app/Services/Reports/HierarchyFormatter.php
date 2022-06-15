@@ -2,32 +2,45 @@
 
 namespace App\Services\Reports;
 
+use Illuminate\Database\Eloquent\Collection;
+
 class HierarchyFormatter
 {
-    private $accountHeads;
 
-    private function __construct($accountHeads)
+    private function __construct(private Collection|array $accountHeads)
     {
-        $this->accountHeads = $accountHeads;
         return $this;
     }
 
-    public static function setAccountHeads($accountHeads)
+    /**
+     * @param $accountHeads
+     * @return static
+     */
+    public static function setAccountHeads($accountHeads): self
     {
         return new static($accountHeads);
     }
 
-    private function getAccountHeads()
+    /**
+     * @return mixed
+     */
+    private function getAccountHeads(): mixed
     {
         return $this->accountHeads;
     }
 
-    public function format()
+    /**
+     * @return array
+     */
+    public function format(): array
     {
-        return $this->reportData();
+        return $this->getReportData();
     }
 
-    private function reportData()
+    /**
+     * @return array
+     */
+    private function getReportData(): array
     {
         $reports = [];
 
@@ -41,37 +54,64 @@ class HierarchyFormatter
         return $reports;
     }
 
-    private function formatChildAccount($heads)
+    /**
+     * @param $heads
+     * @return array
+     */
+    private function formatChildAccount($heads): array
     {
-        if (empty($heads)) {
-            return [];
-        }
         $reports = [];
-        foreach ($heads as $head) {
-            $totalAmount = $head->transactions->sum('debit')
-                - $head->transactions->sum('credit')
-                + $this->computeTransaction($head->childAccountHeads);
 
-            $reports[] = [
-                'head_name' => $head->name,
-                'total_amount' => $totalAmount,
-                'childs' => $this->formatChildAccount($head->childAccountHeads),
-            ];
+        if (!empty($heads)) {
+            foreach ($heads as $head) {
+
+                $totalAmount = $this->getTotalAmount($head);
+
+                $reports[] = [
+                    'head_name' => $head->name,
+                    'total_amount' => $totalAmount,
+                    'childs' => $this->formatChildAccount($head->childAccountHeads),
+                ];
+            }
         }
+
         return $reports;
     }
 
-    private function computeTransaction($heads)
+    /**
+     * @param $heads
+     * @return int
+     */
+    private function computeTransaction($heads): int
     {
-        if (empty($heads)) {
-            return 0;
-        }
         $totalAmount = 0;
-        foreach ($heads as $head) {
-            $totalAmount += $head->transactions->sum('debit')
-                - $head->transactions->sum('credit')
-                + $this->computeTransaction($head->childAccountHeads);
+
+        if (!empty($heads)) {
+            foreach ($heads as $head) {
+
+                $totalAmount += $this->getTotalAmount($head);
+            }
         }
+
         return $totalAmount;
+    }
+
+    /**
+     * @param $head
+     * @return mixed
+     */
+    private function getTotalAmount($head): mixed
+    {
+        return $this->calculateTotalAmount($head->transactions)
+            + $this->computeTransaction($head->childAccountHeads);
+    }
+
+    /**
+     * @param $transactions
+     * @return mixed
+     */
+    private function calculateTotalAmount($transactions): mixed
+    {
+        return ($transactions->sum('debit') - $transactions->sum('credit'));
     }
 }

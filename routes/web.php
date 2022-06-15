@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Report\HierarchyReportController;
+use App\Http\Controllers\Report\TransactionsReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['prefix' => 'report-1'], function () {
+    Route::get('', [HierarchyReportController::class, 'index']);
+    Route::post('', [HierarchyReportController::class, 'report']);
+});
+
+Route::group(['prefix' => 'report-2'], function () {
+    Route::get('', [TransactionsReportController::class, 'index']);
+    Route::post('', [TransactionsReportController::class, 'report']);
 });

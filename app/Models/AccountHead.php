@@ -15,7 +15,7 @@ class AccountHead extends Model
     protected $table = "account_heads";
     protected $primaryKey = "id";
     protected $fillable = [
-        'name', 'parent_id', 'level'
+        'name', 'parent_id', 'level',
     ];
 
     public function parentAccountHead(): BelongsTo

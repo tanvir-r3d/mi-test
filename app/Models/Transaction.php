@@ -13,7 +13,7 @@ class Transaction extends Model
     protected $table = "transactions";
     protected $primaryKey = "id";
     protected $fillable = [
-        'account_head_id', 'date', 'debit', 'credit'
+        'account_head_id', 'date', 'debit', 'credit',
     ];
 
     public function accountHead(): BelongsTo

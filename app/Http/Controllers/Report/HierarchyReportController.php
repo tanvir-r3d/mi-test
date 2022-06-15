@@ -30,7 +30,7 @@ class HierarchyReportController extends Controller
             ->format();
 
         return view('reports.hierarchy.index', [
-            'account_heads' => $reportData
+            'account_heads' => $reportData,
         ]);
     }
 }

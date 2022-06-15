@@ -55,6 +55,7 @@ class TransactionFormatter
                 $this->makeGroupLevels($accountHead->parentAccountHead)
             );
         }
+
         return $reportData;
     }
 
@@ -64,7 +65,7 @@ class TransactionFormatter
      */
     private function makeGroupLevels($parentAccount): array
     {
-        if (!isset($parentAccount->name)) {
+        if (! isset($parentAccount->name)) {
             return [];
         }
 

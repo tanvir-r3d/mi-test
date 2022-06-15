@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class HierarchyFormatter
 {
-
     private function __construct(private Collection|array $accountHeads)
     {
         return $this;
@@ -51,6 +50,7 @@ class HierarchyFormatter
                 'childs' => $this->formatChildAccount($head->childAccountHeads),
             ];
         }
+
         return $reports;
     }
 
@@ -64,7 +64,6 @@ class HierarchyFormatter
 
         if (!empty($heads)) {
             foreach ($heads as $head) {
-
                 $totalAmount = $this->getTotalAmount($head);
 
                 $reports[] = [
@@ -88,7 +87,6 @@ class HierarchyFormatter
 
         if (!empty($heads)) {
             foreach ($heads as $head) {
-
                 $totalAmount += $this->getTotalAmount($head);
             }
         }

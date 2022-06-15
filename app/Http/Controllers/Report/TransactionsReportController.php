@@ -18,7 +18,7 @@ class TransactionsReportController extends Controller
     {
         $transactions = Transaction::query()
             ->with([
-                'accountHead.parentAccountHead.parentAccountHead.parentAccountHead'
+                'accountHead.parentAccountHead.parentAccountHead.parentAccountHead',
             ])
             ->selectRaw('*, SUM(debit) - SUM(credit) as total_amount')
             ->groupBy('account_head_id')
@@ -27,7 +27,7 @@ class TransactionsReportController extends Controller
         $reportData = TransactionFormatter::setTransactions($transactions)->format();
 
         return view('reports.transaction.index', [
-            'transactions' => $reportData
+            'transactions' => $reportData,
         ]);
     }
 }

@@ -62,7 +62,7 @@ class HierarchyFormatter
     {
         $reports = [];
 
-        if (!empty($heads)) {
+        if (! empty($heads)) {
             foreach ($heads as $head) {
                 $totalAmount = $this->getTotalAmount($head);
 
@@ -85,7 +85,7 @@ class HierarchyFormatter
     {
         $totalAmount = 0;
 
-        if (!empty($heads)) {
+        if (! empty($heads)) {
             foreach ($heads as $head) {
                 $totalAmount += $this->getTotalAmount($head);
             }
